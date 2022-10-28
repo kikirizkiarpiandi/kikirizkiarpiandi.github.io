@@ -1,0 +1,71 @@
+<!--
+
+  "Hello World" Example
+
+  Follow the 3 steps below to export depth maps from a scene:
+    1. Initialize the depth exporter
+    2. Render the scene using the depth exporter
+    3. Resize depth exporter when window size changes
+
+-->
+<html>
+  <head>
+    <title>three.depth.js - "Hello World" Example</title>
+    <link href="css/three.js.css" rel="stylesheet">
+    <script src="https://unpkg.com/three@0.125.1/build/three.min.js"></script>
+    <script src="../js/WebGLDepthExporter.js"></script>
+    <script src="../js/Downloader.js"></script>
+    <script src="js/demo.js"></script>
+  </head> 
+  <body>
+    <canvas></canvas>
+    <div id="info">
+			<a href="https://github.com/alvinwan/three.depth.js" target="_blank" rel="noopener">three.depth.js</a> - "hello world" depth<br/>
+			Displays a depth map. Toggle color (c).<br/>
+      Created by <a href="http://twitter.com/lvinwan">@lvinwan</a>.
+		</div>
+
+    <script>
+      // Initialize the usual stuff, along with a scene
+      const canvas = document.querySelector('canvas');
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 10);
+      const scene = setupTorusKnotScene();
+
+      // Initialize renderer
+      const renderer = new THREE.WebGLRenderer({canvas});
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+      // 1. Initialize depth exporter
+      const depthExporter = new THREE.WebGLDepthExporter(renderer);
+
+      // 2. Update the depth exporter size
+      depthExporter.setSize(canvas.width, canvas.height);
+
+      // 3. Render depth to the canvas
+      depthExporter.setRenderTarget(null);
+      depthExporter.render(scene, camera);
+
+      /**
+       * Extras
+       */
+
+      // Press `c` to toggle color on/off.
+      let renderMode = 0;
+      document.addEventListener('keydown', function(e) {
+        if (e.key == 'c') {
+          renderMode = renderMode ? 0 : 1;
+        }
+
+        if (renderMode == 0) {
+          // render depth
+          depthExporter.setRenderTarget(null);
+          depthExporter.render(scene, camera);
+        } else {
+          // render rgb
+          renderer.setRenderTarget(null);
+          renderer.render(scene, camera);
+        }
+      });
+    </script>
+  </body>
+</html>
