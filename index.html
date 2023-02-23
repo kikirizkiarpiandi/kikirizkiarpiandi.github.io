@@ -38,25 +38,12 @@
 
     </script>
     <script src="app.js"></script>
+    <script src="webrtc.js"></script>
 
 </head>
 
 <body>
-<script type="module">
-        const video = document.getElementById('remoteVideo');
 
-        // Request access to the user's camera and microphone
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-            .then(stream => {
-                // Attach the stream to the video element
-                video.srcObject = stream;
-            })
-            .catch(error => {
-                console.error('Error accessing camera:', error);
-            });
-
-
-</script>
 
 <video id="remoteVideo" autoplay/>
 <video id="backgr" muted autoplay loop playsinline src="videos/meta.mp4"/>
