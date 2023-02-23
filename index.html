@@ -38,30 +38,7 @@
 
     </script>
     <script src="app.js"></script>
-<script>
-      function startStreaming() {
-        // create the audio context
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const audioContext = new AudioContext();
-        console.log("Created audio context");
 
-        // create the stream source from the microphone
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
-          const source = audioContext.createMediaStreamSource(stream);
-          console.log("Created stream source");
-
-          // create the output destination for the speakers
-          const destination = audioContext.destination;
-          console.log("Created audio destination");
-
-          // connect the source to the destination
-          source.connect(destination);
-          console.log("Connected source to destination");
-        }).catch(function(error) {
-          console.error(error);
-        });
-      }
-    </script>
 </head>
 
 <body>
@@ -80,7 +57,7 @@
 
 
 </script>
- <button onclick="startStreaming()">Start</button>
+
 <video id="remoteVideo" autoplay/>
 <video id="backgr" muted autoplay loop playsinline src="videos/meta.mp4"/>
 <video id="localVideo" muted autoplay loop playsinline src="loading.mp4"/>
