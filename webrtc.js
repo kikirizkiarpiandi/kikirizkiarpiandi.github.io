@@ -8,6 +8,8 @@ const roomHash = location.hash.substring(1);
 const drone = new ScaleDrone('mNH4XhlFd7bEH0D5');
 // Room name needs to be prefixed with 'observable-'
 const roomName = 'observable-' + roomHash;
+console.log("ROOM NAME");
+console.log(roomName);
 const configuration = {
   iceServers: [{
     urls: 'stun:stun.l.google.com:19302'
