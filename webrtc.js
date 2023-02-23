@@ -11,7 +11,14 @@ const roomName = 'observable-' + roomHash;
 const configuration = {
   iceServers: [{
     urls: 'stun:stun.l.google.com:19302'
-  }]
+  },
+  {
+    urls: 'stun:stun.3clogic.com:3478'
+  },
+  {
+    urls: 'stun:iphone-stun.strato-iphone.de:3478'
+  }
+  ]
 };
 let room;
 let pc;
