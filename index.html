@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<head>
+    <title>3D VR test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            font-family: georgia;
+            text-align: center;
+        }
+
+        a {
+            color: skyblue;
+            text-decoration: none
+        }
+
+        video {
+            display: none;
+        }
+
+
+    </style>
+<!--    <script src="https://aframe.io/releases/1.3.0/aframe.js"></script>-->
+    <script src="https://unpkg.com/three@0.146.0/build/three.min.js"></script>
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.146.0/build/three.module.js"
+          }
+        }
+
+    </script>
+    <script src="app.js"></script>
+<script>
+      function startStreaming() {
+        // create the audio context
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioContext = new AudioContext();
+        console.log("Created audio context");
+
+        // create the stream source from the microphone
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+          const source = audioContext.createMediaStreamSource(stream);
+          console.log("Created stream source");
+
+          // create the output destination for the speakers
+          const destination = audioContext.destination;
+          console.log("Created audio destination");
+
+          // connect the source to the destination
+          source.connect(destination);
+          console.log("Connected source to destination");
+        }).catch(function(error) {
+          console.error(error);
+        });
+      }
+    </script>
+</head>
+
+<body>
+<script type="module">
+        const video = document.getElementById('sixdof');
+
+        // Request access to the user's camera and microphone
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(stream => {
+                // Attach the stream to the video element
+                video.srcObject = stream;
+            })
+            .catch(error => {
+                console.error('Error accessing camera:', error);
+            });
+
+
+</script>
+ <button onclick="startStreaming()">Start</button>
+<video id="sixdof" autoplay/>
+<video id="backgr" muted autoplay loop playsinline src="meta.mp4"/>
+<video id="person" muted autoplay loop playsinline src="loading.mp4"/>
+<script type="module">
+        import { OrbitControls } from 'https://unpkg.com/three@0.146.0/examples/jsm/controls/OrbitControls.js'
+
+
+        var scene = new THREE.Scene();
+
+        var renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.domElement.id = 'my-canvas';
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        document.body.appendChild(renderer.domElement);
+
+
+
+        var camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 1000);
+        var obj3dRoot = new THREE.Object3D();
+        obj3dRoot.position.y = -6.0;
+        obj3dRoot.position.z = -10.0;
+        camera.position.set(0, 1.35, 7.5);
+
+        const controls = new OrbitControls( camera, renderer.domElement );
+
+        scene.add(obj3dRoot);
+
+        var videoElm = document.getElementById('sixdof');
+        var videoTex = new THREE.VideoTexture(videoElm);
+
+        var viewer = new Viewer(videoTex, null, true);
+
+
+
+
+
+
+
+var video = document.getElementById('backgr');
+const texture = new THREE.VideoTexture(video);
+texture.minFilter = THREE.LinearFilter;
+texture.magFilter = THREE.LinearFilter;
+texture.format = THREE.RGBAFormat;
+
+
+const geometry = new THREE.SphereGeometry(500, 60, 40);
+const material = new THREE.MeshBasicMaterial({ map: texture });
+material.side = THREE.BackSide;
+const sphere = new THREE.Mesh(geometry, material);
+
+
+
+
+scene.add(sphere);
+viewer.position.set( -20, 0, -10 );
+scene.add(viewer);
+
+
+viewer.rotation.set(0,Math.PI*1.5,0);
+viewer.scale.set(2, 2, 2);
+
+        obj3dRoot.rotation.y = 2.7;
+
+        renderer.setAnimationLoop(() => {
+          renderer.render(scene, camera);
+        });
+
+        window.addEventListener('resize', ev => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+
+
+</script>
+</body>
+
+</html>
