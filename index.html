@@ -66,7 +66,7 @@
 
 <body>
 <script type="module">
-        const video = document.getElementById('sixdof');
+        const video = document.getElementById('remoteVideo');
 
         // Request access to the user's camera and microphone
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
@@ -81,9 +81,9 @@
 
 </script>
  <button onclick="startStreaming()">Start</button>
-<video id="sixdof" autoplay/>
+<video id="remoteVideo" autoplay/>
 <video id="backgr" muted autoplay loop playsinline src="videos/meta.mp4"/>
-<video id="person" muted autoplay loop playsinline src="loading.mp4"/>
+<video id="localVideo" muted autoplay loop playsinline src="loading.mp4"/>
 <script type="module">
         import { OrbitControls } from 'https://unpkg.com/three@0.146.0/examples/jsm/controls/OrbitControls.js'
 
@@ -108,7 +108,7 @@
 
         scene.add(obj3dRoot);
 
-        var videoElm = document.getElementById('sixdof');
+        var videoElm = document.getElementById('remoteVideo');
         var videoTex = new THREE.VideoTexture(videoElm);
 
         var viewer = new Viewer(videoTex, null, true);
